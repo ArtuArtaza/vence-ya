@@ -25,7 +25,7 @@ export const register = async ({
     const salt = await genSalt(10);
     const hashedPassword = await hash(password, salt);
     const createdUser = await prisma.users.create({
-      data: { email, password: hashedPassword, username, isValidated: false },
+      data: { email, password: hashedPassword, username, isApproved: false },
       select: { email: true },
     });
     const token = sign(

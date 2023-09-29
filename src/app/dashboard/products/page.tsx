@@ -1,8 +1,8 @@
 "use client";
 import BarcodeScanner from "@/components/barcodescanner/barcodescanner";
 import { Result } from "@zxing/library";
-import { useRef, useState } from "react";
-
+import { useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 const Products = () => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [scannedBarcode, setScannedBarcode] = useState<string>("");
@@ -11,6 +11,13 @@ const Products = () => {
     setScannedBarcode(result.getText());
   };
   console.log(scannedBarcode);
+  const { register, handleSubmit } = useForm();
+
+  const onFormSubmit = (formData: any) => {
+    console.log(formData);
+  };
+
+  console.log("xd");
   const openModal = () => {};
   return (
     <>
@@ -28,7 +35,11 @@ const Products = () => {
         id="my_modal_3"
         className="modal text-white"
       >
-        <form method="dialog" className="modal-box">
+        <form
+          onClick={handleSubmit(onFormSubmit)}
+          method="dialog"
+          className="modal-box"
+        >
           <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
             ✕
           </button>
@@ -37,6 +48,7 @@ const Products = () => {
               <span className="label-text">Nombre del producto</span>
             </label>
             <input
+              {...(register("name"), { required: true })}
               type="text"
               placeholder="Fideos"
               className="input input-bordered w-full max-w-xs"
@@ -48,6 +60,7 @@ const Products = () => {
             </label>
             <label className="input-group">
               <input
+                {...register("listPrice", { required: true })}
                 type="number"
                 placeholder="10"
                 className="input input-bordered"
@@ -59,6 +72,7 @@ const Products = () => {
             </label>
             <label className="input-group">
               <input
+                {...register("sellPrice", { required: true })}
                 type="number"
                 placeholder="10"
                 className="input input-bordered"
@@ -71,6 +85,7 @@ const Products = () => {
               <span className="label-text">Marca</span>
             </label>
             <input
+              {...register("brand", { required: true })}
               type="text"
               placeholder="Coca Cola"
               className="input input-bordered w-full max-w-xs"
@@ -81,13 +96,14 @@ const Products = () => {
               <span className="label-text">Fecha de vencimiento</span>
             </label>
             <input
+              {...register("dueDate", { required: true })}
               type="date"
-              placeholder="Coca Cola"
               className="input input-bordered w-full max-w-xs"
             />
           </div>
           <button className="mt-3 btn btn-primary">Añadir producto</button>
-          <BarcodeScanner onScan={handleBarcodeScanned} />
+          {/* TODO:Is Disabled because i need to check if the webcam exists or no */}
+          {/*false ? <BarcodeScanner onScan={handleBarcodeScanned} /> : null*/}
         </form>
       </dialog>
     </>
