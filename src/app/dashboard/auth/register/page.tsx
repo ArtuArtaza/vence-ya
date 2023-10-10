@@ -1,4 +1,5 @@
 "use client"
+
 import { useForm } from "react-hook-form";
 
 function Registro()
@@ -11,7 +12,7 @@ function Registro()
       <form onSubmit={handleSubmit((data)=>{
         console.log(data)
       })}>
-      
+
         (
             <body className="bg-gray-100">
                 <div className="bg-[#F9FAFB] h-screen w-screen flex items-center"> 
@@ -23,7 +24,7 @@ function Registro()
                       Nombre y apellido
                     </label>
                     <input
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+                      className="input input-bordered input-primary w-full max-w-xs"
                       type="text"
                       id="fullname"
                       placeholder="Juan Perez"
@@ -42,7 +43,7 @@ function Registro()
                       Email
                     </label>
                     <input
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+                      className="input input-bordered input-primary w-full max-w-xs"
                       type="email"
                       id="email"
                       placeholder="juanperez@example.com"
@@ -60,7 +61,7 @@ function Registro()
                       Calle
                     </label>
                     <input
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+                      className="input input-bordered input-primary w-full max-w-xs"
                       type="text"
                       id="street"
                       placeholder="Pelagio B. Luna"
@@ -79,7 +80,7 @@ function Registro()
                       Altura
                     </label>
                     <input
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+                      className="input input-bordered input-primary w-full max-w-xs"
                       type="number"
                       id="alt"
                       placeholder="1220"
@@ -92,13 +93,21 @@ function Registro()
                         La altura de la calle es un campo requerido </span>
                     }
                   </div>
-
+                  <div>
+                  <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="number">
+                      Puedes buscar aqui tu local:
+                    </label>
+                  </div>
+                  
+                
+                  <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d55605.813126245026!2d-66.85174388220773!3d-29.418175859926162!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses!2sar!4v1696477022816!5m2!1ses!2sar" width="315" height="200" className="my-2" ></iframe>
+                  
                   <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
                     Contraseña
                     </label>
                     <input
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+                      className="input input-bordered input-primary w-full max-w-xs"
                       type="password"
                       id="password"
                       placeholder="********"
@@ -110,11 +119,11 @@ function Registro()
                     />
                     {
                       errors.password?.type === "required" && <span className="flex bg-blue-100 rounded-lg p-4 mb-4 text-sm text-blue-700" color="red" role="alert" >
-                        La contrasenia es un campo requerido </span>
+                        La contraseña es un campo requerido </span>
                     }
                     {
                       errors.password?.type == "minLength" && <span className="flex bg-blue-100 rounded-lg p-4 mb-4 text-sm text-blue-700" color="red" role="alert" >
-                        La contrasenia debe tener al menos 6 caracteres </span>
+                        La contraseña debe tener al menos 6 caracteres </span>
                     }
 
                    
@@ -124,7 +133,7 @@ function Registro()
                       Repetir contraseña
                     </label>
                     <input
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+                      className="input input-bordered input-primary w-full max-w-xs"
                       type="password"
                       id="confirm-password"
                       placeholder="********"
@@ -134,11 +143,11 @@ function Registro()
                     />
                     {
                       errors.confirm && <span className="flex bg-blue-100 rounded-lg p-4 mb-4 text-sm text-blue-700" color="red" role="alert" >
-                        repetir contrasenia </span>
+                        Repetir contraseña </span>
                     }
                   </div>
                   <button
-                    className="w-full bg-indigo-500 text-white text-sm font-bold py-2 px-4 rounded-md hover:bg-indigo-600 transition duration-300"
+                    className="w-full max-w-xs mt-5 btn btn-outline btn-info"
                     type="submit">
                     Registrarse
                   </button>
