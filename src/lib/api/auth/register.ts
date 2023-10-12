@@ -35,12 +35,18 @@ export const register = async ({
     return { message: "User created", token: token, success: true };
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {
+      console.log(error);
       return {
         message: "User cannot be created",
         success: false,
         reason: error.cause,
       };
     }
-    return { message: "User cannot be created", success: false, reason: null };
+    return {
+      message: "User cannot be created",
+      success: false,
+      reason: null,
+      error: error,
+    };
   }
 };
