@@ -32,8 +32,9 @@ model Products {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
   brand     String
-  sellPrice String
-  listPrice String
+  sellPrice Float
+  listPrice Float
+  imgSrc    String
   dueDate   DateTime
   users     Users?   @relation(fields: [usersId], references: [id])
   usersId   String?  @db.ObjectId

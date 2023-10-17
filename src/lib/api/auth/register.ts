@@ -32,7 +32,12 @@ export const register = async ({
       { email: createdUser.email },
       process.env.JWT_SECRET as string
     );
-    return { message: "User created", token: token, success: true };
+    return {
+      message: "User created",
+      token: token,
+      success: true,
+      status: 200,
+    };
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {
       console.log(error);
@@ -40,6 +45,7 @@ export const register = async ({
         message: "User cannot be created",
         success: false,
         reason: error.cause,
+        status: 404,
       };
     }
     return {
@@ -47,6 +53,7 @@ export const register = async ({
       success: false,
       reason: null,
       error: error,
+      status: 404,
     };
   }
 };

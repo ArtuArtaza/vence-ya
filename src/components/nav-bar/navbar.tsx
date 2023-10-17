@@ -48,7 +48,9 @@ export const Navbar = () => {
         </div>
       </div>
       <div className="navbar-center">
-        <a className="btn btn-primary normal-case text-xl">Vence-Ya</a>
+        <a className="btn btn-primary normal-case text-xl">
+          <img src="/logo-2.svg" className="w-20 h-20" />
+        </a>
       </div>
       <div className="navbar-end">
         <button className="btn btn-ghost btn-circle">
