@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
@@ -18,11 +19,10 @@ function Register() {
     watch,
     formState: { errors },
   } = useForm<DefaultFormValues>();
-
-  console.log(toast);
+  const router = useRouter();
   const formState = watch();
   const handleOnSubmit = async (formData: DefaultFormValues) => {
-    await toast.promise(
+    const response = await toast.promise(
       fetch("/api/auth/register", {
         method: "POST",
         body: JSON.stringify(formData),
@@ -33,6 +33,9 @@ function Register() {
         error: "Error al registrarse",
       }
     );
+    if (response.status === 200) {
+      return router.push("/dashboard/products");
+    }
   };
   return (
     <div className=" bg-base-300 flex items-center">

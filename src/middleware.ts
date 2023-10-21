@@ -2,13 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import {
   checkRouteType,
   privateRoutesMiddlewares,
-} from "./lib/api/auth/middleware";
+} from "@/lib/api/auth/middleware";
 
 export function middleware(request: NextRequest) {
   const routeType = checkRouteType(request);
   if (routeType === "private") {
     return privateRoutesMiddlewares(request);
   }
+  return NextResponse.next();
 }
 
 export const config = {

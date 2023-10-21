@@ -2,11 +2,13 @@ import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { PrismaClientSingleton } from "../db/prisma";
 import { genSalt, hash } from "bcrypt";
 import { sign } from "jsonwebtoken";
+import { SignJWT } from "jose";
+import { cookies } from "next/headers";
 
 interface RegisterDTO {
   email: string;
-  username: string;
   password: string;
+  fullname: string;
   location: {
     address: string;
     addressNumber: number;
@@ -17,7 +19,7 @@ interface RegisterDTO {
 const prisma = PrismaClientSingleton.getInstance();
 export const register = async ({
   email,
-  username,
+  fullname,
   password,
   location,
 }: RegisterDTO) => {
@@ -25,13 +27,22 @@ export const register = async ({
     const salt = await genSalt(10);
     const hashedPassword = await hash(password, salt);
     const createdUser = await prisma.users.create({
-      data: { email, password: hashedPassword, username, isApproved: false },
-      select: { email: true },
+      data: { email, password: hashedPassword, fullname, isApproved: false },
+      select: { email: true, role: true },
     });
-    const token = sign(
-      { email: createdUser.email },
-      process.env.JWT_SECRET as string
-    );
+    const token = await new SignJWT({
+      email: createdUser.email,
+      role: createdUser.role,
+    })
+      .setProtectedHeader({ alg: "HS256" })
+      .setIssuedAt()
+      .setIssuer("https://example.com")
+      .setAudience("https://example.com")
+      .setExpirationTime("2h")
+      .sign(new TextEncoder().encode(process.env.JWT_SECRET as string));
+
+    const cookieStore = cookies();
+    cookieStore.set("token", token);
     return {
       message: "User created",
       token: token,
@@ -40,7 +51,6 @@ export const register = async ({
     };
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {
-      console.log(error);
       return {
         message: "User cannot be created",
         success: false,

@@ -1,5 +1,6 @@
 import { PrismaClientSingleton } from "@/lib/api/db/prisma";
 import { cookies } from "next/headers";
+import SearchBar from "../search-bar/search-bar";
 
 const prisma = PrismaClientSingleton.getInstance();
 const ProductTable = async () => {
@@ -9,6 +10,7 @@ const ProductTable = async () => {
 
   return (
     <div className="overflow-x-auto w-full bg-base-100 max-w-5xl">
+      <SearchBar />
       <table className="table">
         <thead>
           <tr>
