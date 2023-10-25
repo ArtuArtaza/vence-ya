@@ -4,16 +4,23 @@ import { PrismaClientSingleton } from "@/lib/api/db/prisma";
 import { cookies } from "next/headers";
 import { Suspense } from "react";
 
+export const revalidate = true;
 const prisma = PrismaClientSingleton.getInstance();
-const Products = async () => {
+const Products = async ({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) => {
   const cookieStore = cookies();
   const userInformation = JSON.parse(cookieStore.get("user")?.value || "{}");
-  console.log();
   const cookieRequest = console.log(cookieStore.getAll());
-  console.log({ userInformation, cookieRequest });
   const products = await prisma.products.findMany({
     where: {
       userId: userInformation.id,
+      ...(searchParams &&
+        searchParams.search && {
+          name: searchParams.search as string,
+        }),
     },
   });
   return (

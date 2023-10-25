@@ -28,7 +28,7 @@ export const createProduct = async (request: NextRequest) => {
         },
         { status: 400 }
       );
-
+    revalidatePath("/dashboard/products");
     return NextResponse.json(
       {
         message: "Producto creado con éxito",

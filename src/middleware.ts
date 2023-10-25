@@ -9,9 +9,10 @@ export function middleware(request: NextRequest) {
   if (routeType === "private") {
     return privateRoutesMiddlewares(request);
   }
+  console.log(request.cookies.getAll());
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: "/dashboard/:path*",
+  matcher: ["/dashboard/:path*", "/auth/:path*"],
 };

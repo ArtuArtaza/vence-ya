@@ -1,8 +1,17 @@
 "use client";
-const SearchBar = ({ setProduct }: any) => {
+
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
+
+const SearchBar = () => {
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
   const searchProduct = (formData: FormData) => {
+    const urlSearchParams = new URLSearchParams(searchParams);
     const valueToSearch = formData.get("search");
-    setProduct(valueToSearch);
+    urlSearchParams.set("search", valueToSearch as string);
+    router.push(pathname + "?" + urlSearchParams.toString());
+    router.refresh();
   };
   return (
     <form action={searchProduct}>

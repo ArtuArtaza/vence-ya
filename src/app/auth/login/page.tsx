@@ -25,8 +25,6 @@ function Login() {
         success: "Sesión iniciada",
       }
     );
-    console.log(response);
-
     if (response.status === 200 && response.data.success)
       return router.push("/dashboard/products");
     setIsLoading(false);

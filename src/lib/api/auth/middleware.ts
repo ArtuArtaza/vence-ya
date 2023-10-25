@@ -14,6 +14,7 @@ export const privateRoutesMiddlewares = async (request: NextRequest) => {
   const cookies = request.cookies;
   const token = cookies.get("token");
   const dest = request.nextUrl.clone();
+
   dest.pathname = "/auth/login";
   if (!token) return NextResponse.redirect(dest);
   const userInformation = (await jwtVerify(
@@ -24,7 +25,6 @@ export const privateRoutesMiddlewares = async (request: NextRequest) => {
     }
   )) as any;
   const response = NextResponse.next();
-  console.log(userInformation);
   const {
     payload: { id, email, role },
   } = userInformation;

@@ -4,10 +4,13 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { revalidatePath } from "next/cache";
+import { useRouter } from "next/navigation";
 export const AddProductModal = () => {
   const { register, handleSubmit } = useForm();
+  const router = useRouter();
   const createProduct = async (formData: any) => {
-    await toast.promise(
+    const response = await toast.promise(
       axios.post("/api/dashboard/create-product", {
         ...formData,
         dueDate: new Date(formData.dueDate),
@@ -18,6 +21,9 @@ export const AddProductModal = () => {
         error: "No se pudo crear el producto",
       }
     );
+    if (response.data.success) {
+      router.refresh();
+    }
   };
   const [isOpen, setIsOpen] = useState<boolean>(false);
   return (

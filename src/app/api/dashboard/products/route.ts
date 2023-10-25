@@ -7,7 +7,6 @@ const router = new Router();
 export const GET = (request: NextRequest) => {
   router.get("/dashboard/products", () => getProductsByBarCode(request));
   const p = router.findRoute(request);
-  console.log(p);
   if (p) {
     p(request);
     return NextResponse.json({ elpepe: "" });
