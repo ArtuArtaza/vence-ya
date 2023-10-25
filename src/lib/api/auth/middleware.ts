@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { JwtPayload, verify } from "jsonwebtoken";
 import { jwtVerify } from "jose";
 const privateRoutes = ["dashboard"];
 export const checkRouteType = (request: NextRequest): "private" | "public" => {
@@ -17,14 +16,18 @@ export const privateRoutesMiddlewares = async (request: NextRequest) => {
   const dest = request.nextUrl.clone();
   dest.pathname = "/auth/login";
   if (!token) return NextResponse.redirect(dest);
-  const userInformation = await jwtVerify(
+  const userInformation = (await jwtVerify(
     token.value,
     new TextEncoder().encode(process.env.JWT_SECRET as string),
     {
       algorithms: ["HS256"],
     }
-  );
+  )) as any;
+  const response = NextResponse.next();
   console.log(userInformation);
-  //const role = (userInformation as JwtPayload).role;
-  return NextResponse.next();
+  const {
+    payload: { id, email, role },
+  } = userInformation;
+  response.cookies.set("user", JSON.stringify({ id, email, role }));
+  return response;
 };

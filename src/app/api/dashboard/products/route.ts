@@ -1,9 +1,10 @@
+import { createProduct } from "@/lib/api/products/createProduct";
 import { getProductsByBarCode } from "@/lib/api/products/getProductsByBarCode";
 import { Router } from "@/lib/api/router/router";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 const router = new Router();
-export const GET = (request: Request) => {
+export const GET = (request: NextRequest) => {
   router.get("/dashboard/products", () => getProductsByBarCode(request));
   const p = router.findRoute(request);
   console.log(p);
@@ -13,13 +14,9 @@ export const GET = (request: Request) => {
   }
   return NextResponse.json({ elpepe: "" });
 };
-export const POST = (request: Request) => {
+export const POST = (request: NextRequest) => {
   router.post("/dashboard/products", () => getProductsByBarCode(request));
+  router.post("/dashboard/create-product", () => createProduct(request));
   const p = router.findRoute(request);
-  NextResponse.json({ elpepe: "" });
-  if (p) {
-    p(request);
-    NextResponse.json({ elpepe: "" });
-  }
-  NextResponse.json({ elpepe: "" });
+  return p;
 };

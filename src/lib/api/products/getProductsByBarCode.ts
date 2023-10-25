@@ -2,7 +2,7 @@ import axios from "axios";
 import { load } from "cheerio";
 import { NextRequest } from "next/server";
 
-export const getProductsByBarCode = async (request: Request) => {
+export const getProductsByBarCode = async (request: NextRequest) => {
   console.log("executed");
   const { searchParams } = new URL(request.url);
   const ean = searchParams.get("EAN");

@@ -1,16 +1,14 @@
-import { PrismaClientSingleton } from "@/lib/api/db/prisma";
-import { cookies } from "next/headers";
+"use client";
 import SearchBar from "../search-bar/search-bar";
-
-const prisma = PrismaClientSingleton.getInstance();
-const ProductTable = async () => {
-  const cookieStore = cookies();
-  const userId = cookieStore.get("userId");
-  const products = await prisma.products.findMany();
-
+import { AddProductModal } from "../add-product-modal/add-product-modal";
+import { Products } from "@prisma/client";
+const ProductTable = ({ products }: { products: Products[] }) => {
   return (
-    <div className="overflow-x-auto w-full bg-base-100 max-w-5xl">
-      <SearchBar />
+    <div className="overflow-x-auto w-full bg-base-100 max-w-5xl p-3">
+      <div className="w-full flex items-center justify-end">
+        <SearchBar />
+        <AddProductModal />
+      </div>
       <table className="table">
         <thead>
           <tr>
@@ -23,49 +21,59 @@ const ProductTable = async () => {
             <th>Precio Lista</th>
             <th>Precio Venta</th>
             <th>Marca</th>
+            <th>Vencimiento</th>
           </tr>
         </thead>
-        <tbody>
-          {products.map((product) => (
-            <tr key={product.id}>
-              <th>
-                <label>
-                  <input type="checkbox" className="checkbox" />
-                </label>
-              </th>
-              <td>
-                <div className="flex items-center space-x-3">
-                  <div className="avatar">
-                    <div className="mask mask-squircle w-12 h-12">
-                      <img alt="product" src={product.imgSrc} />
+        {products.length > 0 ? (
+          <>
+            <tbody>
+              {products.map((product) => (
+                <tr key={product.id}>
+                  <th>
+                    <label>
+                      <input type="checkbox" className="checkbox" />
+                    </label>
+                  </th>
+                  <td>
+                    <div className="flex items-center space-x-3">
+                      <div className="avatar">
+                        <div className="mask mask-squircle w-12 h-12">
+                          <img alt="product" src={product.imgSrc} />
+                        </div>
+                      </div>
+                      <div>
+                        <div className="font-bold text-white">
+                          {product.name}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  <div>
-                    <div className="font-bold text-white">{product.name}</div>
-                    {/*<div className="text-sm opacity-50"></div>*/}
-                  </div>
-                </div>
-              </td>
-              <td className="text-white">
-                {`$${product.listPrice}`}
-                <br />
-              </td>
-              <td>Purple</td>
-              <th>
-                <button className="btn btn-ghost btn-xs">details</button>
-              </th>
-            </tr>
-          ))}
-        </tbody>
-        <tfoot>
-          <tr>
-            <th></th>
-            <th>Producto</th>
-            <th>Precio Lista</th>
-            <th>Precio Venta</th>
-            <th>Marca</th>
-          </tr>
-        </tfoot>
+                  </td>
+                  <td className="text-white">
+                    {`$${product.listPrice}`}
+                    <br />
+                  </td>
+                  <td>{`$${product.sellPrice}`}</td>
+                  <td>{product.brand}</td>
+                  <td>{new Date(product.dueDate).toLocaleDateString()}</td>
+                </tr>
+              ))}
+            </tbody>
+            <tfoot>
+              <tr>
+                <th></th>
+                <th>Producto</th>
+                <th>Precio Lista</th>
+                <th>Precio Venta</th>
+                <th>Marca</th>
+                <th>Vencimiento</th>
+              </tr>
+            </tfoot>
+          </>
+        ) : (
+          <h3 className="w-full text-center text-3xl flex items-center justify-center">
+            No tienes productos
+          </h3>
+        )}
       </table>
     </div>
   );

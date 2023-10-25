@@ -28,11 +28,12 @@ export const register = async ({
     const hashedPassword = await hash(password, salt);
     const createdUser = await prisma.users.create({
       data: { email, password: hashedPassword, fullname, isApproved: false },
-      select: { email: true, role: true },
+      select: { email: true, role: true, id: true },
     });
     const token = await new SignJWT({
       email: createdUser.email,
       role: createdUser.role,
+      userId: createdUser.id,
     })
       .setProtectedHeader({ alg: "HS256" })
       .setIssuedAt()
