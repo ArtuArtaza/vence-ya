@@ -13,10 +13,10 @@ export const checkRouteType = (request: NextRequest): "private" | "public" => {
 export const privateRoutesMiddlewares = async (request: NextRequest) => {
   const cookies = request.cookies;
   const token = cookies.get("token");
-  const dest = request.nextUrl.clone();
+  const loginPath = request.nextUrl.clone();
 
-  dest.pathname = "/auth/login";
-  if (!token) return NextResponse.redirect(dest);
+  loginPath.pathname = "/auth/login";
+  if (!token) return NextResponse.redirect(loginPath);
   const userInformation = (await jwtVerify(
     token.value,
     new TextEncoder().encode(process.env.JWT_SECRET as string),
@@ -24,10 +24,20 @@ export const privateRoutesMiddlewares = async (request: NextRequest) => {
       algorithms: ["HS256"],
     }
   )) as any;
+  if (
+    userInformation.payload.role !== "ADMIN" &&
+    request.nextUrl.pathname === "/dashboard/users"
+  ) {
+    const errorPath = request.nextUrl.clone();
+    errorPath.pathname = "/dashboard/error";
+    const response = NextResponse.redirect(errorPath);
+    return response;
+  }
   const response = NextResponse.next();
   const {
     payload: { id, email, role },
   } = userInformation;
+  console.log(userInformation);
   response.cookies.set("user", JSON.stringify({ id, email, role }));
   return response;
 };

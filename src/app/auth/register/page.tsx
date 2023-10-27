@@ -1,5 +1,6 @@
 "use client";
 
+import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -23,24 +24,23 @@ function Register() {
   const formState = watch();
   const handleOnSubmit = async (formData: DefaultFormValues) => {
     const response = await toast.promise(
-      fetch("/api/auth/register", {
-        method: "POST",
-        body: JSON.stringify(formData),
-      }),
+      axios.post("/api/auth/register", formData),
       {
         pending: "Creando cuenta...",
         success: "Registro exitoso",
         error: "Error al registrarse",
       }
     );
-    if (response.status === 200) {
+    if (response.data.success) {
       return router.push("/dashboard/products");
     }
   };
   return (
     <div className=" bg-base-300 flex items-center">
       <div className="container mx-auto py-8">
-        <h1 className="text-2xl font-bold mb-6 text-center">Registrarse</h1>
+        <h1 className="text-2xl font-bold mb-6 text-center text-white">
+          Registrarse
+        </h1>
         <form
           onSubmit={handleSubmit(handleOnSubmit)}
           className="w-full grid max-w-sm mx-auto bg-base-100  p-8 rounded-md shadow-md"
@@ -106,7 +106,7 @@ function Register() {
               Calle
             </label>
             <input
-              className="input input-bordered input-primary w-full max-w-xs"
+              className="input input-bordered input-primary w-full max-w-xs placeholder:text-white"
               type="text"
               id="street"
               placeholder="Pelagio B. Luna"
@@ -133,7 +133,7 @@ function Register() {
               Altura
             </label>
             <input
-              className="input input-bordered input-primary w-full max-w-xs"
+              className="input input-bordered input-primary w-full max-w-xs placeholder:text-white text-white"
               type="number"
               id="alt"
               placeholder="1220"
@@ -175,7 +175,7 @@ function Register() {
               Contraseña
             </label>
             <input
-              className="input input-bordered input-primary w-full max-w-xs"
+              className="input input-bordered input-primary w-full max-w-xs text-white"
               type="password"
               id="password"
               placeholder="********"
@@ -212,7 +212,7 @@ function Register() {
               Repetir contraseña
             </label>
             <input
-              className="input input-bordered input-primary w-full max-w-xs"
+              className="input input-bordered input-primary w-full max-w-xs text-white"
               type="password"
               id="confirm-password"
               placeholder="********"

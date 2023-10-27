@@ -6,6 +6,7 @@ const prisma = PrismaClientSingleton.getInstance();
 export const createProduct = async (request: NextRequest) => {
   const { ...rest } = await request.json();
   const userId = JSON.parse(request.cookies.get("user")?.value as string).id;
+  console.log(request.cookies.getAll());
   console.log(userId);
   try {
     const product = await prisma.products.create({

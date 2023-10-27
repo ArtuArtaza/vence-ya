@@ -1,10 +1,22 @@
 "use client";
 import SearchBar from "../search-bar/search-bar";
 import { AddProductModal } from "../add-product-modal/add-product-modal";
-import { Products } from "@prisma/client";
-const ProductTable = ({ products }: { products: Products[] }) => {
+const ProductTable = ({
+  products,
+}: {
+  products: {
+    id: string;
+    name: string;
+    brand: string;
+    sellPrice: number;
+    listPrice: number;
+    imgSrc: string;
+    dueDate: Date;
+    userId: string | null;
+  }[];
+}) => {
   return (
-    <div className="overflow-x-auto w-full bg-base-100 max-w-5xl p-3">
+    <section className="overflow-x-auto w-full bg-base-100 max-w-5xl p-3">
       <div className="w-full flex items-center justify-end">
         <SearchBar />
         <AddProductModal />
@@ -75,7 +87,7 @@ const ProductTable = ({ products }: { products: Products[] }) => {
           </h3>
         )}
       </table>
-    </div>
+    </section>
   );
 };
 

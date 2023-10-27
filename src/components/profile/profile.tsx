@@ -9,14 +9,15 @@ const getNameInitials = (fullname: string) => {
   if (rest.length > 0) {
     return `${a.charAt(0)}${rest[rest.length - 1].charAt(0)}`;
   }
-  return `${a.charAt(0)}${b.charAt(0)}`;
+  return `${a.charAt(0)}${b ? b.charAt(0) : ""}`;
 };
 const Profile = async () => {
   const cookieStore = cookies();
   const userInformation = JSON.parse(cookieStore.get("user")?.value || "{}");
+  console.log({ userInformation });
   const data = await prisma.users.findUnique({
     where: {
-      id: userInformation.id,
+      email: userInformation.email,
     },
     select: { fullname: true },
   });
@@ -28,17 +29,18 @@ const Profile = async () => {
 
       <ul
         tabIndex={0}
-        className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+        className="dropdown-content z-[1] menu p-2 shadow bg-base-300 rounded-box w-52"
       >
         <li className="p-2">
           <div>
-            {" "}
-            Bienvenido de vuelta,{" "}
-            <span className="text-primary">{data?.fullname}</span>
+            Hola,
+            <strong className="text-bold">
+              {data?.fullname.split(" ")[0]}
+            </strong>
           </div>
         </li>
         <li>
-          <a>Mi Perfil</a>
+          <a className="/dashboard/products">Mis Productos</a>
         </li>
         <li>
           <LogOutButton />

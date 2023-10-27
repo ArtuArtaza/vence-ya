@@ -1,3 +1,4 @@
+import { cookies } from "next/headers";
 import Profile from "../profile/profile";
 
 const links = [
@@ -11,8 +12,12 @@ const links = [
   },
 ];
 export const Navbar = async () => {
+  const cookieStore = cookies();
+  const userInformation = JSON.parse(cookieStore.get("user")?.value || "{}");
+  const role = userInformation.role;
+  console.log({ userInformation, role }, "navbar");
   return (
-    <div className="navbar bg-base-100 text-white">
+    <div className="navbar bg-base-300 text-white">
       <div className="navbar-start">
         <div className="dropdown">
           <label tabIndex={0} className="btn btn-ghost btn-circle">
@@ -40,13 +45,16 @@ export const Navbar = async () => {
                 <a href={`/dashboard${link.to}`}>{link.text}</a>
               </li>
             ))}
+            {role === "ADMIN" && (
+              <li>
+                <a href={`/dashboard/users`}>Usuarios</a>
+              </li>
+            )}
           </ul>
         </div>
       </div>
       <div className="navbar-center">
-        <a className="btn btn-primary normal-case text-xl">
-          <img src="/logo-2.svg" className="w-20 h-20" />
-        </a>
+        <a className="btn btn-primary normal-case text-xl">Vence Ya</a>
       </div>
       <div className="navbar-end">
         <Profile />

@@ -33,7 +33,7 @@ export const register = async ({
     const token = await new SignJWT({
       email: createdUser.email,
       role: createdUser.role,
-      userId: createdUser.id,
+      id: createdUser.id,
     })
       .setProtectedHeader({ alg: "HS256" })
       .setIssuedAt()

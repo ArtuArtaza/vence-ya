@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { revalidatePath } from "next/cache";
 import { useRouter } from "next/navigation";
+import BarcodeScanner from "../barcodescanner/barcodescanner";
 export const AddProductModal = () => {
   const { register, handleSubmit } = useForm();
   const router = useRouter();
@@ -25,6 +26,9 @@ export const AddProductModal = () => {
       router.refresh();
     }
   };
+  const handleBarcodeScanned = (result: any) => {
+    console.log(result);
+  };
   const [isOpen, setIsOpen] = useState<boolean>(false);
   return (
     <>
@@ -35,7 +39,7 @@ export const AddProductModal = () => {
         <form
           onSubmit={handleSubmit(createProduct)}
           method="dialog"
-          className="modal-box flex flex-col items-center"
+          className="modal-box flex flex-col items-center gap-3"
         >
           <button
             type="button"
@@ -52,10 +56,10 @@ export const AddProductModal = () => {
               {...register("name")}
               type="text"
               placeholder="Fideos"
-              className="input input-bordered w-full max-w-xs"
+              className="input input-bordered"
             />
           </div>
-          <div className="form-control">
+          <div className="form-control  w-full max-w-xs flex flex-col gap-3">
             <label className="label">
               <span className="label-text">Precio Lista</span>
             </label>
@@ -80,7 +84,7 @@ export const AddProductModal = () => {
                 })}
                 type="number"
                 placeholder="10"
-                className="input input-bordered"
+                className="input input-bordered max-w-xs"
               />
               <span>ARS</span>
             </label>
@@ -111,8 +115,6 @@ export const AddProductModal = () => {
           <button type="submit" className="mt-3 btn btn-primary">
             Añadir producto
           </button>
-          {/* TODO:Is Disabled because i need to check if the webcam exists or no */}
-          {/*false ? <BarcodeScanner onScan={handleBarcodeScanned} /> : null*/}
         </form>
       </dialog>
     </>
